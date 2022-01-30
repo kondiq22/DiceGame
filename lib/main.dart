@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Dice Game',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Dice Game'),
     );
@@ -51,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
       0: 'Draw!',
       1: 'You Won!',
       2: 'You Lost!',
+      3: 'Get Luck!',
     };
-    String text;
     if (_dice != 0) {
       if (_dice > _opponentDice) {
         _option = 1;
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     } else {
-      text = 'Get Luck!';
+      _option = 3;
     }
     return Text(
       _textOptions[_option],
@@ -90,9 +90,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
       default:
         {
-          return Colors.deepOrange;
+          return Colors.blueAccent;
         }
     }
+  }
+
+  dropDiceImage(String whoDice, int result) {
+    Map<String, List<String>> _diceImage = {
+      'bot': [
+        'images/b0.png',
+        'images/b1.png',
+        'images/b2.png',
+        'images/b3.png',
+        'images/b4.png',
+        'images/b5.png',
+        'images/b6.png',
+      ],
+      'user': [
+        'images/u0.png',
+        'images/u1.png',
+        'images/u2.png',
+        'images/u3.png',
+        'images/u4.png',
+        'images/u5.png',
+        'images/u6.png',
+      ],
+    };
+    return _diceImage[whoDice]![result];
   }
 
   @override
@@ -103,60 +127,93 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            whoWon(_dice, _opponentDice),
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'Opponent result:',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                    ),
-                    Text(
-                      '$_opponentDice',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 55),
-                    ),
-                  ],
-                ),
                 const Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
                 ),
-                Column(
+                whoWon(_dice, _opponentDice),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'Your result: ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Text(
+                          'Opponent result:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                        Text(
+                          '$_opponentDice',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 55),
+                        ),
+                        SizedBox(
+                          child:
+                              Image.asset(dropDiceImage('bot', _opponentDice)),
+                          width: 140,
+                          height: 140,
+                        ),
+                      ],
                     ),
-                    Text(
-                      '$_dice',
-                      // style: Theme.of(context).textTheme.headline1,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 55),
+                    const Padding(
+                      padding: EdgeInsets.all(20),
                     ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Text(
+                          'Your result: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                        Text(
+                          '$_dice',
+                          // style: Theme.of(context).textTheme.headline1,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 55),
+                        ),
+                        SizedBox(
+                          child: Image.asset(dropDiceImage('user', _dice)),
+                          width: 140,
+                          height: 140,
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(20),
-            ),
-            ElevatedButton(
-              onPressed: roundStart,
-              child: const Text('Start the game.'),
-            ),
+            Column(
+              children: [
+                SizedBox(
+                  width: 150,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: roundStart,
+                    child: const Text('Start the game.'),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.all(8)),
+                SizedBox(
+                  width: 150,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: roundStart, // to do
+                    child: const Text('Restart the game.'),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                ),
+              ],
+            )
           ],
         ),
       ),
