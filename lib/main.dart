@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'game.dart';
+import 'dice.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Dice Game'),
+      home: const MyHomePage(
+        title: 'Flutter Dice Game',
+      ),
     );
   }
 }
@@ -30,94 +33,171 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _dice = 0;
+  int _userDice = 0;
   int _opponentDice = 0;
+  int userScore = 0;
+  int opponentScore = 0;
+  int numerRounds = 0;
 
-  throwDice() {
-    int result = 1 + Random().nextInt(6);
-    return result;
-  }
-
-  roundStart() {
-    setState(() {
-      _dice = throwDice();
-      _opponentDice = throwDice();
-    });
-  }
-
-  whoWon(_dice, _opponentDice) {
-    int _option = 0;
-    Map _textOptions = {
-      0: 'Draw!',
-      1: 'You Won!',
-      2: 'You Lost!',
-      3: 'Get Luck!',
-    };
-    if (_dice != 0) {
-      if (_dice > _opponentDice) {
-        _option = 1;
-      } else {
-        if (_dice < _opponentDice) {
-          _option = 2;
-        } else {
-          _option = 0;
-        }
-      }
+  void startNewRound() {
+    numerRounds++;
+    if (_opponentDice > _userDice) {
+      opponentScore++;
     } else {
-      _option = 3;
+      if (_opponentDice < _userDice) {
+        userScore++;
+      }
     }
-    return Text(
-      _textOptions[_option],
-      style: TextStyle(
-        fontSize: 55,
-        fontWeight: FontWeight.bold,
-        color: setTextColor(_option),
+  }
+
+  void restartGameAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Restart The Game.'),
+        content: const Text('Are you sure you want to restart the game?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel!'),
+          ),
+          TextButton(
+            onPressed: () {
+              restartGame();
+              Navigator.pop(context);
+            },
+            child: const Text('Yes!'),
+          ),
+        ],
       ),
     );
   }
 
-  setTextColor(_option) {
-    switch (_option) {
-      case 1:
-        {
-          return Colors.green;
-        }
-
-      case 2:
-        {
-          return Colors.red;
-        }
-
-      default:
-        {
-          return Colors.blueAccent;
-        }
-    }
+  void restartGame() {
+    // AlertDialog(
+    //   title: Text('Restart.'),
+    //   content: Text('Are you sure you want to restart the game?'),
+    //   actions: <Widget>[
+    //     TextButton(
+    //       onPressed: () => Navigator.pop(context, 'Cancel'),
+    //       child: const Text('Cancel'),
+    //     ),
+    //     TextButton(
+    //       onPressed: () => Navigator.pop(context, 'OK'),
+    //       child: const Text('OK'),
+    //     ),
+    //   ],
+    // );
+    //
+    setState(() {
+      userScore = 0;
+      opponentScore = 0;
+      numerRounds = 0;
+      _userDice = 0;
+      _opponentDice = 0;
+      Dice.whoWon(_userDice, _opponentDice);
+    });
   }
 
-  dropDiceImage(String whoDice, int result) {
-    Map<String, List<String>> _diceImage = {
-      'bot': [
-        'images/b0.png',
-        'images/b1.png',
-        'images/b2.png',
-        'images/b3.png',
-        'images/b4.png',
-        'images/b5.png',
-        'images/b6.png',
-      ],
-      'user': [
-        'images/u0.png',
-        'images/u1.png',
-        'images/u2.png',
-        'images/u3.png',
-        'images/u4.png',
-        'images/u5.png',
-        'images/u6.png',
-      ],
-    };
-    return _diceImage[whoDice]![result];
+  roundStart() {
+    setState(() {
+      _userDice = Dice.throwDice();
+      _opponentDice = Dice.throwDice();
+      startNewRound();
+    });
   }
+
+  //  roundStart(_dice, _opponentDice) {
+  //   _dice = 1 + Random().nextInt(6);
+  //   _opponentDice = 1 + Random().nextInt(6);
+
+  // }
+
+  // throwDice() {
+  //   int result = 1 + Random().nextInt(6);
+  //   return result;
+  // }
+
+  // roundStart() {
+  //   setState(() {
+  //     _dice = throwDice();
+  //     _opponentDice = throwDice();
+  //   });
+  // }
+
+  // whoWon(_dice, _opponentDice) {
+  //   int _option = 0;
+  //   Map _textOptions = {
+  //     0: 'Draw!',
+  //     1: 'You Won!',
+  //     2: 'You Lost!',
+  //     3: 'Get Luck!',
+  //   };
+  //   if (_dice != 0) {
+  //     if (_dice > _opponentDice) {
+  //       _option = 1;
+  //     } else {
+  //       if (_dice < _opponentDice) {
+  //         _option = 2;
+  //       } else {
+  //         _option = 0;
+  //       }
+  //     }
+  //   } else {
+  //     _option = 3;
+  //   }
+  //   return Text(
+  //     _textOptions[_option],
+  //     style: TextStyle(
+  //       fontSize: 55,
+  //       fontWeight: FontWeight.bold,
+  //       color: setTextColor(_option),
+  //     ),
+  //   );
+  // }
+
+  // setTextColor(_option) {
+  //   switch (_option) {
+  //     case 1:
+  //       {
+  //         return Colors.green;
+  //       }
+
+  //     case 2:
+  //       {
+  //         return Colors.red;
+  //       }
+
+  //     default:
+  //       {
+  //         return Colors.blueAccent;
+  //       }
+  //   }
+  // }
+
+  // dropDiceImage(String whoDice, int result) {
+  //   Map<String, List<String>> _diceImage = {
+  //     'bot': [
+  //       'images/b0.png',
+  //       'images/b1.png',
+  //       'images/b2.png',
+  //       'images/b3.png',
+  //       'images/b4.png',
+  //       'images/b5.png',
+  //       'images/b6.png',
+  //     ],
+  //     'user': [
+  //       'images/u0.png',
+  //       'images/u1.png',
+  //       'images/u2.png',
+  //       'images/u3.png',
+  //       'images/u4.png',
+  //       'images/u5.png',
+  //       'images/u6.png',
+  //     ],
+  //   };
+  //   return _diceImage[whoDice]![result];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -134,15 +214,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                whoWon(_dice, _opponentDice),
+                Dice.whoWon(_userDice, _opponentDice),
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const Text(
                           'Opponent result:',
@@ -150,13 +230,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
                         Text(
-                          '$_opponentDice',
+                          '$opponentScore',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 55),
                         ),
                         SizedBox(
-                          child:
-                              Image.asset(dropDiceImage('bot', _opponentDice)),
+                          child: Image.asset(
+                              Dice.dropDiceImage('bot', _opponentDice)),
                           width: 140,
                           height: 140,
                         ),
@@ -174,13 +254,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
                         Text(
-                          '$_dice',
+                          '$userScore',
                           // style: Theme.of(context).textTheme.headline1,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 55),
                         ),
                         SizedBox(
-                          child: Image.asset(dropDiceImage('user', _dice)),
+                          child: Image.asset(
+                              Dice.dropDiceImage('user', _userDice)),
                           width: 140,
                           height: 140,
                         ),
@@ -205,8 +286,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 150,
                   height: 45,
                   child: ElevatedButton(
-                    onPressed: roundStart, // to do
+                    onPressed: restartGameAlert, // to do
                     child: const Text('Restart the game.'),
+                    style: ElevatedButton.styleFrom(primary: Colors.deepOrange),
                   ),
                 ),
                 const Padding(
