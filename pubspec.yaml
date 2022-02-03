@@ -73,6 +73,9 @@ flutter:
     - images/u4.png
     - images/u5.png
     - images/u6.png
+    - images/diceimage.png
+    - images/dicelogo.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
