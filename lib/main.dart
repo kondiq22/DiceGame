@@ -107,43 +107,35 @@ class _MyHomePageState extends State<MyHomePage> {
     return gameHistory;
   }
 
-  showRoundHistory1() {
-    gameHistory.forEach((key, value) {
-      Container(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Text(gameHistory[key].toString()),
-          Text(':'),
-          Text(gameHistory[key].toString())
-        ]),
-      );
-    });
-  }
-
   showRoundHistory() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return SizedBox(
-            child: Dialog(
-                child: Column(
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Text(gameHistory[0]![0].toString()),
-              Text(':'),
-              Text(gameHistory[0]![1].toString())
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Text(gameHistory[1]![0].toString()),
-              Text(':'),
-              Text(gameHistory[1]![1].toString())
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Text(gameHistory[2]![0].toString()),
-              Text(':'),
-              Text(gameHistory[2]![1].toString())
-            ])
-          ],
-        )));
+          child: Dialog(
+            child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var k in gameHistory.keys)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Round ' + k.toString() + ':'),
+                        Padding(padding: EdgeInsets.all(15)),
+                        Text(
+                          gameHistory[k]![0].toString(),
+                        ),
+                        Padding(padding: EdgeInsets.all(15)),
+                        Text(':'),
+                        Padding(padding: EdgeInsets.all(15)),
+                        Text(
+                          gameHistory[k]![1].toString(),
+                        ),
+                      ],
+                    ),
+                ]),
+          ),
+        );
       },
     );
   }
@@ -200,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Column(
                 children: [
+                  displayWitchRound(),
                   const Padding(
                     padding: EdgeInsets.all(10),
                   ),
