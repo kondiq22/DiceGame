@@ -7,11 +7,18 @@ class Game extends StatelessWidget {
   int opponentScore = 0;
   int numerRounds = 0;
 
-  void startNewRound() {
-
-    numerRounds++;
-
+  void startNewRound(numberRounds, _opponentDice, _userDice) {
+    numberRounds++;
+    if (_opponentDice > _userDice) {
+      opponentScore++;
+    } else {
+      if (_opponentDice < _userDice) {
+        userScore++;
+      }
+    }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,98 @@
+for (var k in gameHistory.keys) print({gameHistory[k]});
+
+// 
+
+  showRoundHistory() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          child: Dialog(
+              child: Column(
+            children: <Widget>[
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                gameHistory.forEach(
+                  (key, value) {
+                    print('Round: ' +
+                        key.toString() +
+                        'Value: ' +
+                        value[0].toString() +
+                        ' : ' +
+                        value[1].toString());
+                  },
+                )
+              ]),
+            ],
+          )),
+        );
+      },
+    );
+  }
+  // 
+
+  
+  showRoundHistory2() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+            child: Dialog(
+          child: Container(
+            child: showRoundHistory1(),
+          ),
+        ));
+      },
+    );
+  }
+
+  //
+
+    showRoundHistory1() {
+    gameHistory.forEach((key, value) {
+      Container(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Text(gameHistory.keys.toString()),
+          Text(':'),
+          Text(gameHistory[value].toString())
+        ]),
+      );
+
+      for (var k in gameHistory.keys) print(gameHistory[k]![0]);
+    });
+    void roundInfo;
+    gameHistory.forEach(
+      (k, v) {
+        Text('Round: ' +
+            k.toString() +
+            'Value: ' +
+            v[0].toString() +
+            ' : ' +
+            v[1].toString());
+        return roundInfo;
+      },
+    );
+  }
+
+              (() {
+              if (op > us) {
+                return Center(
+                  child: Text(
+                    'Lose.',
+                  ),
+                );
+              }
+              if (op < us) {
+                return Center(
+                  child: Text(
+                    'Win.',
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    'Draw.',
+                  ),
+                );
+              }
+            }())),
+            );

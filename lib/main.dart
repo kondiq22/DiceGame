@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'dice.dart';
+import 'game.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-//in progress 01.02.2022
   void restartGameAlert() {
     showDialog(
       context: context,
@@ -64,7 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
         content: const Text('Are you sure you want to restart the game?'),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30.0))),
-        // shape: CircleBorder(side: BorderSide.none),
         actions: <Widget>[
           ElevatedButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -107,37 +108,173 @@ class _MyHomePageState extends State<MyHomePage> {
     return gameHistory;
   }
 
+  historyDrawer(op, us) {
+    return SizedBox(
+        width: 70,
+        height: 25,
+        child: (() {
+          if (op > us) {
+            return Container(
+                padding: EdgeInsets.all(5),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius:
+                      BorderRadius.only(bottomRight: Radius.circular(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    'Lose.',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ));
+          }
+          if (op < us) {
+            return Container(
+                padding: EdgeInsets.all(5),
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  borderRadius:
+                      BorderRadius.only(bottomRight: Radius.circular(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    'Win.',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ));
+          } else {
+            return Container(
+                padding: EdgeInsets.all(5),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius:
+                      BorderRadius.only(bottomRight: Radius.circular(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    'Draw.',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ));
+          }
+        }()));
+  }
+
   showRoundHistory() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          child: Dialog(
-            child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var k in gameHistory.keys)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Round ' + k.toString() + ':'),
-                        Padding(padding: EdgeInsets.all(15)),
-                        Text(
-                          gameHistory[k]![0].toString(),
-                        ),
-                        Padding(padding: EdgeInsets.all(15)),
-                        Text(':'),
-                        Padding(padding: EdgeInsets.all(15)),
-                        Text(
-                          gameHistory[k]![1].toString(),
-                        ),
-                      ],
-                    ),
-                ]),
-          ),
-        );
-      },
-    );
+    gameHistory.containsKey(0)
+        ? gameHistory.clear()
+        : showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                backgroundColor: Colors.black45,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ImageIcon(
+                            AssetImage('images/dicelogo.png'),
+                            size: 40,
+                            color: Colors.white70,
+                          ),
+                          Padding(padding: EdgeInsets.all(4)),
+                          Text(
+                            'Round History: ',
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                          ImageIcon(
+                            AssetImage('images/dicelogo.png'),
+                            size: 40,
+                            color: Colors.white70,
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Colors.white,
+                      ),
+                      if (gameHistory.isEmpty)
+                        Column(
+                          children: [
+                            Text(
+                              'Game history is empty.',
+                              style: TextStyle(
+                                  color: Colors.white70, fontSize: 25),
+                            ),
+                            Padding(padding: EdgeInsets.all(10))
+                          ],
+                        )
+                      else
+                        for (var k in gameHistory.keys)
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: SizedBox(
+                              width: 230,
+                              height: 25,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.black54,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.lightBlue,
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10)),
+                                      ),
+                                      child: SizedBox(
+                                        width: 70,
+                                        height: 25,
+                                        child: Center(
+                                          child: Text(
+                                            'Round ' + k.toString() + ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(4)),
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.blueAccent,
+                                        ),
+                                        child: Text(
+                                          gameHistory[k]![0].toString() +
+                                              ' : ' +
+                                              gameHistory[k]![1].toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        alignment: Alignment.center,
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(4)),
+                                    historyDrawer(
+                                        gameHistory[k]![0], gameHistory[k]![1])
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
   }
 
   displayWitchRound() {
@@ -170,17 +307,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: <Widget>[
           Container(
-            padding: const EdgeInsets.only(right: 15),
-            child: const ImageIcon(
-              AssetImage('images/dicelogo.png'),
-              size: 30,
-            ),
-          )
+              padding: const EdgeInsets.only(right: 15),
+              child: FloatingActionButton(
+                elevation: 20,
+                backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+                child: ImageIcon(
+                  AssetImage('images/dicelogo.png'),
+                  size: 40,
+                ),
+                onPressed: showRoundHistory,
+              ))
         ],
       ),
       body: Center(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.blueAccent,
+                Colors.orangeAccent,
+              ],
+            ),
             image: DecorationImage(
               alignment: AlignmentDirectional(0, 10),
               image: AssetImage('images/diceimage.png'),
@@ -204,7 +354,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           const Text(
                             'Opponent result:',
@@ -237,7 +386,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Text(
                             '$userScore',
-                            // style: Theme.of(context).textTheme.headline1,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 55),
                           ),
@@ -255,18 +403,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Column(
                 children: [
-                  SizedBox(
-                    width: 150,
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        side:
-                            BorderSide(color: Colors.lightBlueAccent, width: 1),
-                      ),
-                      onPressed: showRoundHistory,
-                      child: const Text('History.'),
-                    ),
-                  ),
                   SizedBox(
                     width: 150,
                     height: 45,
