@@ -55,7 +55,7 @@ class Dice extends StatelessWidget {
 
       default:
         {
-          return Colors.blueAccent;
+          return Colors.orange;
         }
     }
   }
@@ -89,4 +89,3 @@ class Dice extends StatelessWidget {
     return Container();
   }
 }
-
