@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'dice.dart';
-import 'game.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -97,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  rundResultsSaver() {
+  roundResultsSaver() {
     Map<int, List<int>> gameResults = {
       numberRounds: [
         _opponentDice,
@@ -296,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _userDice = Dice.throwDice();
       _opponentDice = Dice.throwDice();
       startNewRound();
-      rundResultsSaver();
+      roundResultsSaver();
     });
   }
 
