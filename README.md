@@ -1,4 +1,4 @@
-# cube
+# Dice
 
 A new Flutter project.
 
