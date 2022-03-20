@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Game extends StatelessWidget {
-  Game(this.userScore, this.opponentScore, this.numerRounds, {Key? key})
+  Game(this.userScore, this.opponentScore, this.numberRounds, {Key? key})
       : super(key: key);
   int userScore = 0;
   int opponentScore = 0;
-  int numerRounds = 0;
+  int numberRounds = 0;
 
   void startNewRound(numberRounds, _opponentDice, _userDice) {
     numberRounds++;
@@ -18,13 +18,8 @@ class Game extends StatelessWidget {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Container();
   }
 }
-
-
-
